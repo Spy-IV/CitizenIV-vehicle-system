@@ -2,6 +2,9 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		local engine = nil
+        local ped = GetPlayerChar(-1)
+        local px, py, pz = GetCharCoordinates(ped)
+        local closestcar = GetClosestCar(px, py, pz, 10.0, false, 70)
 		if(IsCharInAnyCar(GetPlayerChar(-1))) then
 			local petrol = GetPetrolTankHealth(vehicle)
 			local vehicle = (GetCarCharIsUsing(GetPlayerChar(-1))) 
@@ -53,5 +56,20 @@ Citizen.CreateThread(function()
 		else
 			engine = false
 		end
+		if(IsGameKeyboardKeyJustPressed(22)) then --[ U ]--
+			if(closestcar == ownedcar--[[This variable must be changed to your server's saved car variable]]) then
+				if(DoesVehicleExist(closestcar)) then
+					if(lock == false) then
+						lock = true
+						PrintStringWithLiteralStringNow("STRING", "locked", 2000, 1)
+						LockCarDoors(closestcar, 3)
+					else
+						lock = false
+						PrintStringWithLiteralStringNow("STRING", "Unlocked", 2000, 1)
+						LockCarDoors(closestcar, 0)
+					end
+				end
+            end
+        end
 	end
 end)
